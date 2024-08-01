@@ -117,9 +117,11 @@ public class DatabaseJoin extends BaseTransform<DatabaseJoinMeta, DatabaseJoinDa
           Object[] newRow = RowDataUtil.resizeArray(rowData, data.outputRowMeta.size());
           int newIndex = rowMeta.size();
           for (int i = 0; i < addMeta.size(); i++) {
-            // Convert Long to double when required. This solves the issue mentioned in the comments of #2312
+            // Convert Long to double when required. This solves the issue mentioned in the comments
+            // of #2312
             Object value = add[i];
-            if (value instanceof Long && data.outputRowMeta.getValueMeta(newIndex).getType() == IValueMeta.TYPE_NUMBER) {
+            if (value instanceof Long
+                && data.outputRowMeta.getValueMeta(newIndex).getType() == IValueMeta.TYPE_NUMBER) {
               value = (Double) ((Long) value).doubleValue();
             }
             newRow[newIndex++] = value;
