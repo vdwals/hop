@@ -47,6 +47,7 @@ public class ScriptValuesMetaInjectionTest extends BaseMetadataInjectionTest<Scr
     check("FIELD_REPLACE", () -> meta.getReplace()[0]);
     check("SCRIPT_NAME", () -> meta.getJSScripts()[0].getScriptName());
     check("SCRIPT", () -> meta.getJSScripts()[0].getScript());
+    check("LOAD_ALL_COLUMNS", () -> meta.isLoadAllColumns());
 
     // field type requires special handling, since it's stored as an array of ints, but injected as
     // strings

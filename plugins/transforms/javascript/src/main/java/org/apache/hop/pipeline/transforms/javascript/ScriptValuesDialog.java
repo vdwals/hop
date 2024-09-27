@@ -48,6 +48,7 @@ import org.apache.hop.ui.core.dialog.ErrorDialog;
 import org.apache.hop.ui.core.dialog.MessageBox;
 import org.apache.hop.ui.core.dialog.PreviewRowsDialog;
 import org.apache.hop.ui.core.gui.GuiResource;
+import org.apache.hop.ui.core.widget.CheckBoxVar;
 import org.apache.hop.ui.core.widget.ColumnInfo;
 import org.apache.hop.ui.core.widget.StyledTextComp;
 import org.apache.hop.ui.core.widget.TableView;
@@ -162,6 +163,8 @@ public class ScriptValuesDialog extends BaseTransformDialog {
   private ScriptValuesHelp scVHelp;
   private TextVar wOptimizationLevel;
 
+  private CheckBoxVar wLoadAllColumns;
+
   private TreeItem iteminput;
 
   private TreeItem itemoutput;
@@ -274,6 +277,22 @@ public class ScriptValuesDialog extends BaseTransformDialog {
     topLayout.marginHeight = PropsUi.getFormMargin();
     wTop.setLayout(topLayout);
 
+    // Using compression for temporary files?
+    Label wlLoadAllColumns = new Label(wTop, SWT.RIGHT);
+    wlLoadAllColumns.setText(BaseMessages.getString(PKG, "ScriptValues.LoadAllColumns.Label"));
+    PropsUi.setLook(wlLoadAllColumns);
+    FormData fdlCompress = new FormData();
+    fdlCompress.left = new FormAttachment(0, 0);
+    fdlCompress.top = new FormAttachment(0, 0);
+    wlLoadAllColumns.setLayoutData(fdlCompress);
+    wLoadAllColumns = new CheckBoxVar(variables, shell, SWT.CHECK, "");
+    PropsUi.setLook(wLoadAllColumns);
+    FormData fdCompress = new FormData();
+    fdCompress.left = new FormAttachment(0, 0);
+    fdCompress.top = new FormAttachment(wlLoadAllColumns, 0, SWT.CENTER);
+    fdCompress.right = new FormAttachment(100, 0);
+    wLoadAllColumns.setLayoutData(fdCompress);
+
     // Script line
     Label wlScriptFunctions = new Label(wTop, SWT.NONE);
     wlScriptFunctions.setText(
@@ -281,6 +300,7 @@ public class ScriptValuesDialog extends BaseTransformDialog {
     PropsUi.setLook(wlScriptFunctions);
     FormData fdlScriptFunctions = new FormData();
     fdlScriptFunctions.left = new FormAttachment(0, 0);
+    fdlCompress.top = new FormAttachment(wLoadAllColumns, margin * 2);
     fdlScriptFunctions.top = new FormAttachment(0, 0);
     wlScriptFunctions.setLayoutData(fdlScriptFunctions);
 
@@ -778,6 +798,10 @@ public class ScriptValuesDialog extends BaseTransformDialog {
       wOptimizationLevel.setText(ScriptValuesMeta.OPTIMIZATION_LEVEL_DEFAULT);
     }
 
+    if (input.isLoadAllColumns()) {
+      wLoadAllColumns.setSelection(true);
+    }
+
     for (int i = 0; i < input.getFieldname().length; i++) {
       if (input.getFieldname()[i] != null && input.getFieldname()[i].length() > 0) {
         TableItem item = wFields.table.getItem(i);
@@ -869,6 +893,7 @@ public class ScriptValuesDialog extends BaseTransformDialog {
 
   private void getInfo(ScriptValuesMeta meta) {
     meta.setOptimizationLevel(wOptimizationLevel.getText());
+    meta.setLoadAllColumns(wLoadAllColumns.getSelection());
     int nrFields = wFields.nrNonEmpty();
     meta.allocate(nrFields);
     for (int i = 0; i < nrFields; i++) {

@@ -91,14 +91,14 @@ public class ScriptValues extends BaseTransform<ScriptValuesMeta, ScriptValuesDa
     super(transformMeta, meta, data, copyNr, pipelineMeta, pipeline);
   }
 
-  private void determineUsedFields(IRowMeta row) {
+  private void determineUsedFields(IRowMeta row, boolean loadAllColumns) {
     int nr = 0;
     // Count the occurrences of the values.
     // Perhaps we find values in comments, but we take no risk!
     //
     for (int i = 0; i < row.size(); i++) {
       String valname = row.getValueMeta(i).getName().toUpperCase();
-      if (strTransformScript.toUpperCase().indexOf(valname) >= 0) {
+      if (strTransformScript.toUpperCase().indexOf(valname) >= 0 || loadAllColumns) {
         nr++;
       }
     }
@@ -114,7 +114,7 @@ public class ScriptValues extends BaseTransform<ScriptValuesMeta, ScriptValuesDa
       // Values are case-insensitive in JavaScript.
       //
       String valname = row.getValueMeta(i).getName();
-      if (strTransformScript.indexOf(valname) >= 0) {
+      if (strTransformScript.indexOf(valname) >= 0 || loadAllColumns) {
         if (isDetailed()) {
           logDetailed(
               BaseMessages.getString(
@@ -145,7 +145,7 @@ public class ScriptValues extends BaseTransform<ScriptValuesMeta, ScriptValuesDa
 
       // Determine the indexes of the fields used!
       //
-      determineUsedFields(rowMeta);
+      determineUsedFields(rowMeta, meta.isLoadAllColumns());
 
       // Get the indexes of the replaced fields...
       //

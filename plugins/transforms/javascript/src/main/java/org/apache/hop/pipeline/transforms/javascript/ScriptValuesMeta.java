@@ -116,6 +116,9 @@ public class ScriptValuesMeta extends BaseTransformMeta<ScriptValues, ScriptValu
   @Injection(name = "OPTIMIZATION_LEVEL")
   private String optimizationLevel;
 
+  @Injection(name = "LOAD_ALL_COLUMNS")
+  private boolean loadAllColumns;
+
   public ScriptValuesMeta() {
     super(); // allocate BaseTransformMeta
     try {
@@ -245,6 +248,14 @@ public class ScriptValuesMeta extends BaseTransformMeta<ScriptValues, ScriptValu
       precision[i] = -1;
     }
     replace = new boolean[nrFields];
+  }
+
+  public boolean isLoadAllColumns() {
+    return loadAllColumns;
+  }
+
+  public void setLoadAllColumns(boolean loadAllColumns) {
+    this.loadAllColumns = loadAllColumns;
   }
 
   /**
